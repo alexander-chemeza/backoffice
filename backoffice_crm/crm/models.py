@@ -18,7 +18,7 @@ class Advertisements(models.Model):
     name = models.CharField(max_length=300, blank=False, null=False)
     channel = models.CharField(max_length=300, blank=False, null=False)
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
-    service = models.ForeignKey(Services, on_delete=models.CASCADE, null=False, blank=False, related_name='services')
+    service = models.ForeignKey(Services, on_delete=models.CASCADE, null=False, blank=False, related_name='advertisements')
 
 
 class Profile(models.Model):
@@ -28,13 +28,13 @@ class Profile(models.Model):
     surname = models.CharField(max_length=200, blank=False)
     phone = models.CharField(max_length=200, blank=False)
     email = models.EmailField(max_length=300, blank=False)
-    advertisement = models.ForeignKey(Advertisements, on_delete=models.CASCADE, null=False, blank=False, related_name='advertisements')
+    advertisement = models.ForeignKey(Advertisements, on_delete=models.CASCADE, null=True, blank=True, related_name='advertisements')
     status = models.BooleanField(default=False)
 
 
 class Contracts(models.Model):
     name = models.CharField(max_length=300, blank=False, null=False)
-    service = models.ForeignKey(Services, on_delete=models.CASCADE, null=False, blank=False, related_name='services')
+    service = models.ForeignKey(Services, on_delete=models.CASCADE, null=False, blank=False, related_name='contracts')
     file = models.FileField(upload_to=profile_file_path, null=False, blank=False)
     contact_date = models.DateField(null=False, blank=False)
     period = models.IntegerField(null=False, blank=False)
