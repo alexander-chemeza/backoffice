@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 
+from .models import Services
 from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
 
 
 # Create your views here.
+def services_list(request: HttpRequest) -> HttpResponse:
+    context = {
+        "products": Services.objects.all()
+    }
+    return render(request, "crm/products/products-list.html", context=context)
+
+
 def new_service(request: HttpRequest) -> HttpResponse:
     context = {
         "form": NewServiceForm(),

@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import new_service, new_advertisement, new_customer, new_contract, new_active_customer
+from .views import new_service, new_advertisement, new_customer, new_contract, new_active_customer, services_list
 
 app_name = 'crm'
 
@@ -13,7 +13,7 @@ urlpatterns = [
     path('login/', TemplateView.as_view(template_name='crm/registration/login.html'),),
 
     # Listings
-    path('products/', TemplateView.as_view(template_name='crm/products/products-list.html'),),
+    path('products/', services_list, name='services'),
     path('leads/', TemplateView.as_view(template_name='crm/leads/leads-list.html'),),
     path('customers/', TemplateView.as_view(template_name='crm/customers/customers-list.html'),),
     path('contracts/', TemplateView.as_view(template_name='crm/contracts/contracts-list.html'),),
