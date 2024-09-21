@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 
-from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm
+from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
 
 
 # Create your views here.
@@ -22,6 +22,13 @@ def new_advertisement(request: HttpRequest) -> HttpResponse:
 def new_customer(request: HttpRequest) -> HttpResponse:
     context = {
         "form": NewCustomerForm(),
+    }
+    return render(request, 'crm/leads/leads-create.html', context=context)
+
+
+def new_active_customer(request: HttpRequest) -> HttpResponse:
+    context = {
+        "form": NewActiveCustomerForm(),
     }
     return render(request, 'crm/customers/customers-create.html', context=context)
 

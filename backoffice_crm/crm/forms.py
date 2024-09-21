@@ -28,6 +28,21 @@ class NewCustomerForm(forms.Form):
     email = forms.EmailField(max_length=300, label="Email")
 
 
+class NewActiveCustomerForm(forms.Form):
+    user = forms.ModelChoiceField(
+        queryset=Profile.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+        label='Пользователь'
+    )
+    advertisement = forms.ModelChoiceField(
+        queryset=Advertisements.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+        label='Рекламная кампания'
+    )
+
+
 class NewContractForm(forms.Form):
     name = forms.CharField(max_length=300, label="Название контракта")
     service = forms.ModelChoiceField(
