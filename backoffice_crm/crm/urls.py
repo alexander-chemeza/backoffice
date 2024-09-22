@@ -12,6 +12,12 @@ from .views import (
     customers_list,
     customers_active_list,
     contacts_list,
+    contracts_details,
+    ServiceDetail,
+    AdvertisementDetail,
+    LeadDetail,
+    CustomerDetail,
+    ContractDetail,
 )
 
 app_name = 'crm'
@@ -45,11 +51,11 @@ urlpatterns = [
     path('ads/<int:pk>/delete/', TemplateView.as_view(template_name='crm/ads/ads-delete.html'),),
 
     # Instance details
-    path('products/<int:pk>/', TemplateView.as_view(template_name='crm/products/products-detail.html'),),
-    path('leads/<int:pk>/', TemplateView.as_view(template_name='crm/leads/leads-detail.html'),),
-    path('customers/<int:pk>/', TemplateView.as_view(template_name='crm/customers/customers-detail.html'),),
-    path('contracts/<int:pk>/', TemplateView.as_view(template_name='crm/contracts/contracts-detail.html'),),
-    path('ads/<int:pk>/', TemplateView.as_view(template_name='crm/ads/ads-detail.html'),),
+    path('products/<int:pk>/', ServiceDetail.as_view(), name='service_details'),
+    path('leads/<int:pk>/', LeadDetail.as_view(), name='lead_details'),
+    path('customers/<int:pk>/', CustomerDetail.as_view(), name='customer_details'),
+    path('contracts/<int:pk>/', ContractDetail.as_view(), name='contract_details'),
+    path('ads/<int:pk>/', AdvertisementDetail.as_view(), name='ad_details'),
     path('ads/statistic/', TemplateView.as_view(template_name='crm/ads/ads-statistic.html'),),
 
     # Instance edit

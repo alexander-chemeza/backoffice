@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpRequest
+from django.views.generic import DetailView
 
 from .models import Services, Advertisements, Customer, Contracts
 from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
@@ -128,3 +129,48 @@ def new_contract(request: HttpRequest) -> HttpResponse:
         "form": form,
     }
     return render(request, 'crm/contracts/contracts-create.html', context=context)
+
+
+def contracts_details(request: HttpRequest) -> HttpResponse:
+    # crm/contracts/contracts-detail.html
+    pass
+
+
+def customers_details(request: HttpRequest) -> HttpResponse:
+    # crm/customers/customers-detail.html
+    pass
+
+
+def leads_details(request: HttpRequest) -> HttpResponse:
+    # crm/leads/leads-detail.html
+    pass
+
+
+class ServiceDetail(DetailView):
+    template_name = 'crm/products/products-detail.html'
+    queryset = Services.objects.prefetch_related()
+    context_object_name = 'object'
+
+
+class AdvertisementDetail(DetailView):
+    template_name = 'crm/ads/ads-detail.html'
+    queryset = Advertisements.objects.prefetch_related('service')
+    context_object_name = 'object'
+
+
+class LeadDetail(DetailView):
+    template_name = 'crm/leads/leads-detail.html'
+    queryset = Customer.objects.prefetch_related('advertisement')
+    context_object_name = 'object'
+
+
+class CustomerDetail(DetailView):
+    template_name = 'crm/customers/customers-detail.html'
+    queryset = Customer.objects.prefetch_related('advertisement')
+    context_object_name = 'object'
+
+
+class ContractDetail(DetailView):
+    template_name = 'crm/contracts/contracts-detail.html'
+    queryset = Contracts.objects.prefetch_related('service', 'user')
+    context_object_name = 'object'

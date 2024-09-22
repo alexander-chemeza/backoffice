@@ -54,7 +54,7 @@ class NewContractForm(forms.Form):
     )
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={"class":"form-control"}), label="Файл")
     contract_date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date"}), label="Дата заключения контракта")
-    period = forms.IntegerField(widget=forms.DateInput(attrs={"class":"form-control"}), label="Период")
+    period = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date"}), label="Дата окончания контракта")
     total_cost = forms.DecimalField(max_digits=10, decimal_places=2, label="Полная стоимость")
     user = forms.ModelChoiceField(
         queryset=Customer.objects.all(),

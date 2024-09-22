@@ -59,7 +59,7 @@ class Contracts(models.Model):
     service = models.ForeignKey(Services, on_delete=models.CASCADE, null=False, blank=False, related_name='contracts')
     file = models.FileField(upload_to=profile_file_path, null=False, blank=False)
     contract_date = models.DateField(null=False, blank=False)
-    period = models.IntegerField(null=False, blank=False)
+    period = models.DateField(null=False, blank=False)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE, null=False, blank=False, related_name='customers')
 
