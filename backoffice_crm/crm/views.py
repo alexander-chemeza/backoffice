@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpRequest
-from django.views.generic import DetailView, DeleteView
+from django.views.generic import DetailView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 
 from .models import Services, Advertisements, Customer, Contracts
@@ -132,21 +132,6 @@ def new_contract(request: HttpRequest) -> HttpResponse:
     return render(request, 'crm/contracts/contracts-create.html', context=context)
 
 
-def contracts_details(request: HttpRequest) -> HttpResponse:
-    # crm/contracts/contracts-detail.html
-    pass
-
-
-def customers_details(request: HttpRequest) -> HttpResponse:
-    # crm/customers/customers-detail.html
-    pass
-
-
-def leads_details(request: HttpRequest) -> HttpResponse:
-    # crm/leads/leads-detail.html
-    pass
-
-
 class ServiceDetail(DetailView):
     template_name = 'crm/products/products-detail.html'
     queryset = Services.objects.prefetch_related()
@@ -209,4 +194,39 @@ class ContractDelete(DeleteView):
     template_name = 'crm/contracts/contracts-delete.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
+    success_url = reverse_lazy("crm:contracts")
+
+
+class ServiceEdit(UpdateView):
+    model = Services
+    template_name = 'crm/products/products-edit.html'
+    fields = ['name', 'description', 'cost']
+    success_url = reverse_lazy("crm:services")
+
+
+class AdvertisementEdit(UpdateView):
+    model = Advertisements
+    template_name = 'crm/ads/ads-edit.html'
+    fields = ['name', 'channel', 'budget', 'service']
+    success_url = reverse_lazy("crm:advertisements")
+
+
+class LeadEdit(UpdateView):
+    model = Customer
+    template_name = 'crm/leads/leads-edit.html'
+    fields = ['last_name', 'first_name', 'surname', 'phone', 'email']
+    success_url = reverse_lazy("crm:leads")
+
+
+class CustomerEdit(UpdateView):
+    model = Customer
+    template_name = 'crm/customers/customers-edit.html'
+    fields = ['advertisement', 'status']
+    success_url = reverse_lazy("crm:customers")
+
+
+class ContractEdit(UpdateView):
+    model = Contracts
+    template_name = 'crm/contracts/contracts-edit.html'
+    fields = ['name', 'service', 'file', 'contract_date', 'period', 'total_cost', 'user']
     success_url = reverse_lazy("crm:contracts")

@@ -12,7 +12,6 @@ from .views import (
     customers_list,
     customers_active_list,
     contacts_list,
-    contracts_details,
     ServiceDetail,
     AdvertisementDetail,
     LeadDetail,
@@ -22,7 +21,12 @@ from .views import (
     AdvertisementDelete,
     LeadDelete,
     CustomerDelete,
-    ContractDelete
+    ContractDelete,
+    ServiceEdit,
+    AdvertisementEdit,
+    LeadEdit,
+    CustomerEdit,
+    ContractEdit,
 )
 
 app_name = 'crm'
@@ -64,11 +68,11 @@ urlpatterns = [
     path('ads/statistic/', TemplateView.as_view(template_name='crm/ads/ads-statistic.html'),),
 
     # Instance edit
-    path('products/<int:pk>/edit/', TemplateView.as_view(template_name='crm/products/products-edit.html'),),
-    path('leads/<int:pk>/edit/', TemplateView.as_view(template_name='crm/leads/leads-edit.html'),),
-    path('customers/<int:pk>/edit/', TemplateView.as_view(template_name='crm/customers/customers-edit.html'),),
-    path('contracts/<int:pk>/edit/', TemplateView.as_view(template_name='crm/contracts/contracts-edit.html'),),
-    path('ads/<int:pk>/edit/', TemplateView.as_view(template_name='crm/ads/ads-edit.html'),),
+    path('products/<int:pk>/edit/', ServiceEdit.as_view(), name='edit_service'),
+    path('leads/<int:pk>/edit/', LeadEdit.as_view(), name='edit_lead'),
+    path('customers/<int:pk>/edit/', CustomerEdit.as_view(), name="edit_customer"),
+    path('contracts/<int:pk>/edit/', ContractEdit.as_view(), name="edit_contract"),
+    path('ads/<int:pk>/edit/', AdvertisementEdit.as_view(), name='edit_advertisement'),
 
     # END OF TEMPLATES ROUTES
 ]
