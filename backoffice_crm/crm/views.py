@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpRequest
-from django.views.generic import DetailView
+from django.views.generic import DetailView, DeleteView
+from django.urls import reverse_lazy
 
 from .models import Services, Advertisements, Customer, Contracts
 from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
@@ -174,3 +175,38 @@ class ContractDetail(DetailView):
     template_name = 'crm/contracts/contracts-detail.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
+
+
+class ServiceDetele(DeleteView):
+    template_name = 'crm/products/products-delete.html'
+    queryset = Services.objects.prefetch_related()
+    context_object_name = 'object'
+    success_url = reverse_lazy("crm:services")
+
+
+class AdvertisementDelete(DeleteView):
+    template_name = 'crm/ads/ads-delete.html'
+    queryset = Advertisements.objects.prefetch_related('service')
+    context_object_name = 'object'
+    success_url = reverse_lazy("crm:advertisements")
+
+
+class LeadDelete(DeleteView):
+    template_name = 'crm/leads/leads-delete.html'
+    queryset = Customer.objects.prefetch_related('advertisement')
+    context_object_name = 'object'
+    success_url = reverse_lazy("crm:leads")
+
+
+class CustomerDelete(DeleteView):
+    template_name = 'crm/customers/customers-delete.html'
+    queryset = Customer.objects.prefetch_related('advertisement')
+    context_object_name = 'object'
+    success_url = reverse_lazy("crm:customers")
+
+
+class ContractDelete(DeleteView):
+    template_name = 'crm/contracts/contracts-delete.html'
+    queryset = Contracts.objects.prefetch_related('service', 'user')
+    context_object_name = 'object'
+    success_url = reverse_lazy("crm:contracts")

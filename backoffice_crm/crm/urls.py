@@ -18,6 +18,11 @@ from .views import (
     LeadDetail,
     CustomerDetail,
     ContractDetail,
+    ServiceDetele,
+    AdvertisementDelete,
+    LeadDelete,
+    CustomerDelete,
+    ContractDelete
 )
 
 app_name = 'crm'
@@ -44,11 +49,11 @@ urlpatterns = [
     path('ads/new/', new_advertisement, name='new_advertisement'),
 
     # Delete instances
-    path('products/<int:pk>/delete/', TemplateView.as_view(template_name='crm/products/products-delete.html'),),
-    path('leads/<int:pk>/delete/', TemplateView.as_view(template_name='crm/leads/leads-delete.html'),),
-    path('customers/<int:pk>/delete/', TemplateView.as_view(template_name='crm/customers/customers-delete.html'),),
-    path('contracts/<int:pk>/delete/', TemplateView.as_view(template_name='crm/contracts/contracts-delete.html'),),
-    path('ads/<int:pk>/delete/', TemplateView.as_view(template_name='crm/ads/ads-delete.html'),),
+    path('products/<int:pk>/delete/', ServiceDetele.as_view(), name='delete_service'),
+    path('leads/<int:pk>/delete/', LeadDelete.as_view(), name='delete_lead'),
+    path('customers/<int:pk>/delete/', CustomerDelete.as_view(), name='delete_customer'),
+    path('contracts/<int:pk>/delete/', ContractDelete.as_view(), name='delete_contract'),
+    path('ads/<int:pk>/delete/', AdvertisementDelete.as_view(), name='delete_advertisement'),
 
     # Instance details
     path('products/<int:pk>/', ServiceDetail.as_view(), name='service_details'),
