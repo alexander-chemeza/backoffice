@@ -1,7 +1,18 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from .views import new_service, new_advertisement, new_customer, new_contract, new_active_customer, services_list
+from .views import (
+    new_service,
+    new_advertisement,
+    new_customer,
+    new_contract,
+    new_active_customer,
+    services_list,
+    advertisements_list,
+    customers_list,
+    customers_active_list,
+    contacts_list,
+)
 
 app_name = 'crm'
 
@@ -14,10 +25,10 @@ urlpatterns = [
 
     # Listings
     path('products/', services_list, name='services'),
-    path('leads/', TemplateView.as_view(template_name='crm/leads/leads-list.html'),),
-    path('customers/', TemplateView.as_view(template_name='crm/customers/customers-list.html'),),
-    path('contracts/', TemplateView.as_view(template_name='crm/contracts/contracts-list.html'),),
-    path('ads/', TemplateView.as_view(template_name='crm/ads/ads-list.html'),),
+    path('leads/', customers_list, name='leads'),
+    path('customers/', customers_active_list, name='customers'),
+    path('contracts/', contacts_list, name='contracts'),
+    path('ads/', advertisements_list, name='advertisements'),
 
     # New instances
     path('products/new/', new_service, name='new_service'),

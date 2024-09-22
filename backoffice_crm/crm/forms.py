@@ -1,5 +1,5 @@
 from django import forms
-from .models import Advertisements, Services, Profile
+from .models import Advertisements, Services, Customer
 
 
 class NewServiceForm(forms.Form):
@@ -11,18 +11,19 @@ class NewServiceForm(forms.Form):
 class NewAdvertisementForm(forms.Form):
     name = forms.CharField(max_length=300, label="Название рекламной кампании")
     channel = forms.CharField(max_length=300, label="Название канала продвижения")
-    cost = forms.DecimalField(max_digits=10, decimal_places=2, label="Бюджет на рекламу")
+    budget = forms.DecimalField(max_digits=10, decimal_places=2, label="Бюджет на рекламу")
     service = forms.ModelChoiceField(
         queryset=Services.objects.all(),
         widget=forms.Select(attrs={"class":"form-control"}),
         required=True,
-        label='Услуга'
+        label='Услуга',
+        to_field_name='name',
     )
 
 
 class NewCustomerForm(forms.Form):
     last_name = forms.CharField(max_length=200, label="Фамилия")
-    first = forms.CharField(max_length=200, label="Имя")
+    first_name = forms.CharField(max_length=200, label="Имя")
     surname = forms.CharField(max_length=200, label="Отчество")
     phone = forms.CharField(max_length=200, label="Телефон")
     email = forms.EmailField(max_length=300, label="Email")
@@ -30,7 +31,7 @@ class NewCustomerForm(forms.Form):
 
 class NewActiveCustomerForm(forms.Form):
     user = forms.ModelChoiceField(
-        queryset=Profile.objects.all(),
+        queryset=Customer.objects.filter(status=False).all(),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=True,
         label='Пользователь'
@@ -52,11 +53,11 @@ class NewContractForm(forms.Form):
         label='Услуга'
     )
     file = forms.FileField(widget=forms.ClearableFileInput(attrs={"class":"form-control"}), label="Файл")
-    contract_date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control"}), label="Дата заключения контракта")
+    contract_date = forms.DateField(widget=forms.DateInput(attrs={"class":"form-control", "type": "date"}), label="Дата заключения контракта")
     period = forms.IntegerField(widget=forms.DateInput(attrs={"class":"form-control"}), label="Период")
     total_cost = forms.DecimalField(max_digits=10, decimal_places=2, label="Полная стоимость")
     user = forms.ModelChoiceField(
-        queryset=Profile.objects.all(),
+        queryset=Customer.objects.all(),
         widget=forms.Select(attrs={"class": "form-control"}),
         required=True,
         label='Пользователь'
