@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpRequest
 from django.views.generic import DetailView, DeleteView, UpdateView
 from django.urls import reverse_lazy
+from django.contrib.auth import logout
 
 from .models import Services, Advertisements, Customer, Contracts
 from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
@@ -230,3 +231,8 @@ class ContractEdit(UpdateView):
     template_name = 'crm/contracts/contracts-edit.html'
     fields = ['name', 'service', 'file', 'contract_date', 'period', 'total_cost', 'user']
     success_url = reverse_lazy("crm:contracts")
+
+
+def logout_view(request: HttpRequest):
+    logout(request)
+    return redirect("crm:login")

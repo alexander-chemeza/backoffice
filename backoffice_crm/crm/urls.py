@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from django.views.generic import TemplateView
 
@@ -27,6 +28,7 @@ from .views import (
     LeadEdit,
     CustomerEdit,
     ContractEdit,
+    logout_view
 )
 
 app_name = 'crm'
@@ -36,8 +38,16 @@ urlpatterns = [
 
     # Main pages
     path('', TemplateView.as_view(template_name='crm/users/index.html'),),
-    path('login/', TemplateView.as_view(template_name='crm/registration/login.html'),),
-
+    path(
+        'login/',
+        LoginView.as_view(
+            template_name='crm/registration/login.html',
+            redirect_authenticated_user=True,
+        ),
+        name='login'
+    ),
+    path('accounts/logout/', logout_view, name='logout'),
+    
     # Listings
     path('products/', services_list, name='services'),
     path('leads/', customers_list, name='leads'),
