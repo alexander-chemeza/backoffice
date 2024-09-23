@@ -28,7 +28,8 @@ from .views import (
     LeadEdit,
     CustomerEdit,
     ContractEdit,
-    logout_view
+    logout_view,
+    home_view,
 )
 
 app_name = 'crm'
@@ -37,7 +38,7 @@ urlpatterns = [
     # START OF TEMPLATES ROUTES
 
     # Main pages
-    path('', TemplateView.as_view(template_name='crm/users/index.html'),),
+    path('', home_view, name='home'),
     path(
         'login/',
         LoginView.as_view(
@@ -47,7 +48,7 @@ urlpatterns = [
         name='login'
     ),
     path('accounts/logout/', logout_view, name='logout'),
-    
+
     # Listings
     path('products/', services_list, name='services'),
     path('leads/', customers_list, name='leads'),
