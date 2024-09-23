@@ -1,7 +1,5 @@
-from itertools import count
-
 from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, Http404
 from django.views.generic import DetailView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
@@ -151,11 +149,23 @@ class ServiceDetail(LoginRequiredMixin, DetailView):
     queryset = Services.objects.prefetch_related()
     context_object_name = 'object'
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:services'))
+
 
 class AdvertisementDetail(LoginRequiredMixin, DetailView):
     template_name = 'crm/ads/ads-detail.html'
     queryset = Advertisements.objects.prefetch_related('service')
     context_object_name = 'object'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:advertisements'))
 
 
 class LeadDetail(LoginRequiredMixin, DetailView):
@@ -163,17 +173,35 @@ class LeadDetail(LoginRequiredMixin, DetailView):
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:leads'))
+
 
 class CustomerDetail(LoginRequiredMixin, DetailView):
     template_name = 'crm/customers/customers-detail.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:customers'))
+
 
 class ContractDetail(LoginRequiredMixin, DetailView):
     template_name = 'crm/contracts/contracts-detail.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:contracts'))
 
 
 class ServiceDetele(LoginRequiredMixin, DeleteView):
