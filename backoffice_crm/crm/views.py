@@ -210,12 +210,24 @@ class ServiceDetele(LoginRequiredMixin, DeleteView):
     context_object_name = 'object'
     success_url = reverse_lazy("crm:services")
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:services'))
+
 
 class AdvertisementDelete(LoginRequiredMixin, DeleteView):
     template_name = 'crm/ads/ads-delete.html'
     queryset = Advertisements.objects.prefetch_related('service')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:advertisements")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:advertisements'))
 
 
 class LeadDelete(LoginRequiredMixin, DeleteView):
@@ -224,12 +236,24 @@ class LeadDelete(LoginRequiredMixin, DeleteView):
     context_object_name = 'object'
     success_url = reverse_lazy("crm:leads")
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:leads'))
+
 
 class CustomerDelete(LoginRequiredMixin, DeleteView):
     template_name = 'crm/customers/customers-delete.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:customers")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:customers'))
 
 
 class ContractDelete(LoginRequiredMixin, DeleteView):
@@ -238,12 +262,24 @@ class ContractDelete(LoginRequiredMixin, DeleteView):
     context_object_name = 'object'
     success_url = reverse_lazy("crm:contracts")
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:contracts'))
+
 
 class ServiceEdit(LoginRequiredMixin, UpdateView):
     model = Services
     template_name = 'crm/products/products-edit.html'
     fields = ['name', 'description', 'cost']
     success_url = reverse_lazy("crm:services")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:services'))
 
 
 class AdvertisementEdit(LoginRequiredMixin, UpdateView):
@@ -252,12 +288,24 @@ class AdvertisementEdit(LoginRequiredMixin, UpdateView):
     fields = ['name', 'channel', 'budget', 'service']
     success_url = reverse_lazy("crm:advertisements")
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:advertisements'))
+
 
 class LeadEdit(LoginRequiredMixin, UpdateView):
     model = Customer
     template_name = 'crm/leads/leads-edit.html'
     fields = ['last_name', 'first_name', 'surname', 'phone', 'email']
     success_url = reverse_lazy("crm:leads")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:leads'))
 
 
 class CustomerEdit(LoginRequiredMixin, UpdateView):
@@ -266,12 +314,24 @@ class CustomerEdit(LoginRequiredMixin, UpdateView):
     fields = ['advertisement', 'status']
     success_url = reverse_lazy("crm:customers")
 
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:customers'))
+
 
 class ContractEdit(LoginRequiredMixin, UpdateView):
     model = Contracts
     template_name = 'crm/contracts/contracts-edit.html'
     fields = ['name', 'service', 'file', 'contract_date', 'period', 'total_cost', 'user']
     success_url = reverse_lazy("crm:contracts")
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except Http404:
+            return redirect(reverse('crm:contracts'))
 
 
 def logout_view(request: HttpRequest):
