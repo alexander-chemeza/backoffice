@@ -19,7 +19,7 @@
 `python manage.py createsuperuser`
 6. Run command to create roles:<br/>
 `python manage.py create_roles`
-Check if db in container is migrated:<br/>
+7. Check if db in container is migrated:<br/>
 `docker exec -it <container id> sh`<br/>
 `psql -U <user login> <dbname>`<br/>
 `\dt`<br/>
