@@ -12,7 +12,7 @@ from .views import (
     advertisements_list,
     customers_list,
     customers_active_list,
-    contacts_list,
+    contracts_list,
     ServiceDetail,
     AdvertisementDetail,
     LeadDetail,
@@ -53,7 +53,7 @@ urlpatterns = [
     path('products/', services_list, name='services'),
     path('leads/', customers_list, name='leads'),
     path('customers/', customers_active_list, name='customers'),
-    path('contracts/', contacts_list, name='contracts'),
+    path('contracts/', contracts_list, name='contracts'),
     path('ads/', advertisements_list, name='advertisements'),
 
     # New instances

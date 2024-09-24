@@ -3,14 +3,15 @@ from django.http import HttpResponse, HttpRequest, Http404
 from django.views.generic import DetailView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 from .models import Services, Advertisements, Customer, Contracts
 from .forms import NewServiceForm, NewAdvertisementForm, NewCustomerForm, NewContractForm, NewActiveCustomerForm
 
 @login_required(login_url='crm:login')
+@permission_required('crm.view_services', raise_exception=True)
 def services_list(request: HttpRequest) -> HttpResponse:
     context = {
         "products": Services.objects.all()
@@ -19,6 +20,7 @@ def services_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.view_advertisements', raise_exception=True)
 def advertisements_list(request: HttpRequest) -> HttpResponse:
     context = {
         "ads": Advertisements.objects.all()
@@ -27,6 +29,7 @@ def advertisements_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.view_customer', raise_exception=True)
 def customers_list(request: HttpRequest) -> HttpResponse:
     context = {
         "leads": Customer.objects.filter(status=False).all()
@@ -35,6 +38,7 @@ def customers_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.view_customer', raise_exception=True)
 def customers_active_list(request: HttpRequest) -> HttpResponse:
     context = {
         "customers": Customer.objects.filter(status=True).all()
@@ -43,7 +47,8 @@ def customers_active_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
-def contacts_list(request: HttpRequest) -> HttpResponse:
+@permission_required('crm.view_contracts', raise_exception=True)
+def contracts_list(request: HttpRequest) -> HttpResponse:
     context = {
         "contracts": Contracts.objects.all()
     }
@@ -51,6 +56,7 @@ def contacts_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.add_services', raise_exception=True)
 def new_service(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewServiceForm(request.POST)
@@ -67,6 +73,7 @@ def new_service(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.add_advertisements', raise_exception=True)
 def new_advertisement(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewAdvertisementForm(request.POST)
@@ -83,6 +90,7 @@ def new_advertisement(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.add_customer', raise_exception=True)
 def new_customer(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewCustomerForm(request.POST)
@@ -99,6 +107,8 @@ def new_customer(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.add_customer', raise_exception=True)
+@permission_required('crm.change_customer', raise_exception=True)
 def new_active_customer(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewActiveCustomerForm(request.POST)
@@ -120,6 +130,7 @@ def new_active_customer(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='crm:login')
+@permission_required('crm.add_contracts', raise_exception=True)
 def new_contract(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewContractForm(request.POST, request.FILES)
@@ -144,10 +155,11 @@ def new_contract(request: HttpRequest) -> HttpResponse:
     return render(request, 'crm/contracts/contracts-create.html', context=context)
 
 
-class ServiceDetail(LoginRequiredMixin, DetailView):
+class ServiceDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'crm/products/products-detail.html'
     queryset = Services.objects.prefetch_related()
     context_object_name = 'object'
+    permission_required = 'crm.view_services'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -156,10 +168,11 @@ class ServiceDetail(LoginRequiredMixin, DetailView):
             return redirect(reverse('crm:services'))
 
 
-class AdvertisementDetail(LoginRequiredMixin, DetailView):
+class AdvertisementDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'crm/ads/ads-detail.html'
     queryset = Advertisements.objects.prefetch_related('service')
     context_object_name = 'object'
+    permission_required = 'crm.view_advertisements'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -168,10 +181,11 @@ class AdvertisementDetail(LoginRequiredMixin, DetailView):
             return redirect(reverse('crm:advertisements'))
 
 
-class LeadDetail(LoginRequiredMixin, DetailView):
+class LeadDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'crm/leads/leads-detail.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
+    permission_required = 'crm.view_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -180,10 +194,11 @@ class LeadDetail(LoginRequiredMixin, DetailView):
             return redirect(reverse('crm:leads'))
 
 
-class CustomerDetail(LoginRequiredMixin, DetailView):
+class CustomerDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'crm/customers/customers-detail.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
+    permission_required = 'crm.view_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -192,10 +207,11 @@ class CustomerDetail(LoginRequiredMixin, DetailView):
             return redirect(reverse('crm:customers'))
 
 
-class ContractDetail(LoginRequiredMixin, DetailView):
+class ContractDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'crm/contracts/contracts-detail.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
+    permission_required = 'crm.view_contracts'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -204,11 +220,12 @@ class ContractDetail(LoginRequiredMixin, DetailView):
             return redirect(reverse('crm:contracts'))
 
 
-class ServiceDetele(LoginRequiredMixin, DeleteView):
+class ServiceDetele(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'crm/products/products-delete.html'
     queryset = Services.objects.prefetch_related()
     context_object_name = 'object'
     success_url = reverse_lazy("crm:services")
+    permission_required = 'crm.delete_services'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -217,11 +234,12 @@ class ServiceDetele(LoginRequiredMixin, DeleteView):
             return redirect(reverse('crm:services'))
 
 
-class AdvertisementDelete(LoginRequiredMixin, DeleteView):
+class AdvertisementDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'crm/ads/ads-delete.html'
     queryset = Advertisements.objects.prefetch_related('service')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:advertisements")
+    permission_required = 'crm.delete_advertisements'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -230,11 +248,12 @@ class AdvertisementDelete(LoginRequiredMixin, DeleteView):
             return redirect(reverse('crm:advertisements'))
 
 
-class LeadDelete(LoginRequiredMixin, DeleteView):
+class LeadDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'crm/leads/leads-delete.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:leads")
+    permission_required = 'crm.delete_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -243,11 +262,12 @@ class LeadDelete(LoginRequiredMixin, DeleteView):
             return redirect(reverse('crm:leads'))
 
 
-class CustomerDelete(LoginRequiredMixin, DeleteView):
+class CustomerDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'crm/customers/customers-delete.html'
     queryset = Customer.objects.prefetch_related('advertisement')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:customers")
+    permission_required = 'crm.delete_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -256,11 +276,12 @@ class CustomerDelete(LoginRequiredMixin, DeleteView):
             return redirect(reverse('crm:customers'))
 
 
-class ContractDelete(LoginRequiredMixin, DeleteView):
+class ContractDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     template_name = 'crm/contracts/contracts-delete.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
     success_url = reverse_lazy("crm:contracts")
+    permission_required = 'crm.delete_contracts'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -269,11 +290,12 @@ class ContractDelete(LoginRequiredMixin, DeleteView):
             return redirect(reverse('crm:contracts'))
 
 
-class ServiceEdit(LoginRequiredMixin, UpdateView):
+class ServiceEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Services
     template_name = 'crm/products/products-edit.html'
     fields = ['name', 'description', 'cost']
     success_url = reverse_lazy("crm:services")
+    permission_required = 'crm.change_services'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -282,11 +304,12 @@ class ServiceEdit(LoginRequiredMixin, UpdateView):
             return redirect(reverse('crm:services'))
 
 
-class AdvertisementEdit(LoginRequiredMixin, UpdateView):
+class AdvertisementEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Advertisements
     template_name = 'crm/ads/ads-edit.html'
     fields = ['name', 'channel', 'budget', 'service']
     success_url = reverse_lazy("crm:advertisements")
+    permission_required = 'crm.change_advertisements'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -295,11 +318,12 @@ class AdvertisementEdit(LoginRequiredMixin, UpdateView):
             return redirect(reverse('crm:advertisements'))
 
 
-class LeadEdit(LoginRequiredMixin, UpdateView):
+class LeadEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Customer
     template_name = 'crm/leads/leads-edit.html'
     fields = ['last_name', 'first_name', 'surname', 'phone', 'email']
     success_url = reverse_lazy("crm:leads")
+    permission_required = 'crm.change_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -308,11 +332,12 @@ class LeadEdit(LoginRequiredMixin, UpdateView):
             return redirect(reverse('crm:leads'))
 
 
-class CustomerEdit(LoginRequiredMixin, UpdateView):
+class CustomerEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Customer
     template_name = 'crm/customers/customers-edit.html'
     fields = ['advertisement', 'status']
     success_url = reverse_lazy("crm:customers")
+    permission_required = 'crm.change_customer'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -321,11 +346,12 @@ class CustomerEdit(LoginRequiredMixin, UpdateView):
             return redirect(reverse('crm:customers'))
 
 
-class ContractEdit(LoginRequiredMixin, UpdateView):
+class ContractEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Contracts
     template_name = 'crm/contracts/contracts-edit.html'
     fields = ['name', 'service', 'file', 'contract_date', 'period', 'total_cost', 'user']
     success_url = reverse_lazy("crm:contracts")
+    permission_required = 'crm.change_contracts'
 
     def get(self, request, *args, **kwargs):
         try:
