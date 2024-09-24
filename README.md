@@ -2,7 +2,7 @@
 **BackOffice CRM system.**
 
 <div style="display: flex; justify-content: space-between;">
-    <img src="./images/logo.png" alt="Image 1" style="width: 80%;"/>
+    <img src="./images/logo.webp" alt="Image 1" style="width: 80%;"/>
 </div>
 
 ## How to run
