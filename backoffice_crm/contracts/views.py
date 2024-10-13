@@ -9,7 +9,7 @@ from .forms import NewContractForm
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.view_contracts', raise_exception=True)
+@permission_required('contracts.view_contracts', raise_exception=True)
 def contracts_list(request: HttpRequest) -> HttpResponse:
     context = {
         "contracts": Contracts.objects.all()
@@ -18,7 +18,7 @@ def contracts_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.add_contracts', raise_exception=True)
+@permission_required('contracts.add_contracts', raise_exception=True)
 def new_contract(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewContractForm(request.POST, request.FILES)
@@ -47,7 +47,7 @@ class ContractDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'contracts/contracts-detail.html'
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
-    permission_required = 'crm.view_contracts'
+    permission_required = 'contracts.view_contracts'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -61,7 +61,7 @@ class ContractDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     queryset = Contracts.objects.prefetch_related('service', 'user')
     context_object_name = 'object'
     success_url = reverse_lazy("contracts:contracts")
-    permission_required = 'crm.delete_contracts'
+    permission_required = 'contracts.delete_contracts'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -75,7 +75,7 @@ class ContractEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'contracts/contracts-edit.html'
     fields = ['name', 'service', 'file', 'contract_date', 'period', 'total_cost', 'user']
     success_url = reverse_lazy("contracts:contracts")
-    permission_required = 'crm.change_contracts'
+    permission_required = 'contracts.change_contracts'
 
     def get(self, request, *args, **kwargs):
         try:

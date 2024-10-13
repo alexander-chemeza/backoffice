@@ -10,7 +10,7 @@ from .models import Products
 from .forms import NewProductForm
 
 @login_required(login_url='staff:login')
-@permission_required('crm.view_services', raise_exception=True)
+@permission_required('products.view_products', raise_exception=True)
 def services_list(request: HttpRequest) -> HttpResponse:
     context = {
         "products": Products.objects.all()
@@ -19,7 +19,7 @@ def services_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.add_services', raise_exception=True)
+@permission_required('products.add_products', raise_exception=True)
 def new_service(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewProductForm(request.POST)
@@ -39,7 +39,7 @@ class ServiceDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'products/products-detail.html'
     queryset = Products.objects.prefetch_related()
     context_object_name = 'object'
-    permission_required = 'crm.view_services'
+    permission_required = 'products.view_products'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -53,7 +53,7 @@ class ServiceDetele(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     queryset = Products.objects.prefetch_related()
     context_object_name = 'object'
     success_url = reverse_lazy("products:services")
-    permission_required = 'crm.delete_services'
+    permission_required = 'products.delete_products'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -67,7 +67,7 @@ class ServiceEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'products/products-edit.html'
     fields = ['name', 'description', 'cost']
     success_url = reverse_lazy("products:services")
-    permission_required = 'crm.change_services'
+    permission_required = 'products.change_products'
 
     def get(self, request, *args, **kwargs):
         try:

@@ -12,7 +12,7 @@ from .forms import NewCustomerForm
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.view_customer', raise_exception=True)
+@permission_required('customers.view_customers', raise_exception=True)
 def customers_active_list(request: HttpRequest) -> HttpResponse:
     context = {
         "customers": Customers.objects.all()
@@ -21,18 +21,14 @@ def customers_active_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.add_customer', raise_exception=True)
-@permission_required('crm.change_customer', raise_exception=True)
+@permission_required('customers.add_customers', raise_exception=True)
+@permission_required('customers.change_customers', raise_exception=True)
 def new_active_customer(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewCustomerForm(request.POST)
         if form.is_valid():
             lead = form.cleaned_data['user']
             advertisement = form.cleaned_data['advertisement']
-
-            # lead.status = True
-            # lead.advertisement = advertisement
-            # lead.save()
             Customers.objects.create(lead=lead, advertisement=advertisement)
             url = reverse('customers:customers')
             return redirect(url)
@@ -48,7 +44,7 @@ class CustomerDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'customers/customers-detail.html'
     queryset = Customers.objects.prefetch_related('advertisement')
     context_object_name = 'object'
-    permission_required = 'crm.view_customer'
+    permission_required = 'customers.view_customers'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -62,7 +58,7 @@ class CustomerDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     queryset = Customers.objects.prefetch_related('advertisement')
     context_object_name = 'object'
     success_url = reverse_lazy("customers:customers")
-    permission_required = 'crm.delete_customer'
+    permission_required = 'customers.delete_customers'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -76,7 +72,7 @@ class CustomerEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'customers/customers-edit.html'
     fields = ['lead', 'advertisement']
     success_url = reverse_lazy("customers:customers")
-    permission_required = 'crm.change_customer'
+    permission_required = 'customers.change_customers'
 
     def get(self, request, *args, **kwargs):
         try:

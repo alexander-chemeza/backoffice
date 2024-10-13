@@ -9,7 +9,7 @@ from .forms import NewLeadForm
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.view_customer', raise_exception=True)
+@permission_required('leads.view_leads', raise_exception=True)
 def customers_list(request: HttpRequest) -> HttpResponse:
     context = {
         "leads": Leads.objects.filter(status=False).all()
@@ -18,7 +18,7 @@ def customers_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.add_customer', raise_exception=True)
+@permission_required('leads.add_leads', raise_exception=True)
 def new_customer(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewLeadForm(request.POST)
@@ -38,7 +38,7 @@ class LeadDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
     template_name = 'leads/leads-detail.html'
     queryset = Leads.objects.prefetch_related()
     context_object_name = 'object'
-    permission_required = 'crm.view_customer'
+    permission_required = 'leads.view_leads'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -52,7 +52,7 @@ class LeadDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     queryset = Leads.objects.prefetch_related()
     context_object_name = 'object'
     success_url = reverse_lazy("leads:leads")
-    permission_required = 'crm.delete_customer'
+    permission_required = 'leads.delete_leads'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -66,7 +66,7 @@ class LeadEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     template_name = 'leads/leads-edit.html'
     fields = ['last_name', 'first_name', 'surname', 'phone', 'email']
     success_url = reverse_lazy("leads:leads")
-    permission_required = 'crm.change_customer'
+    permission_required = 'leads.change_leads'
 
     def get(self, request, *args, **kwargs):
         try:

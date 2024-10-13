@@ -11,7 +11,7 @@ from .forms import NewAdvertisementForm
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.view_advertisements', raise_exception=True)
+@permission_required('ads.view_ads', raise_exception=True)
 def advertisements_list(request: HttpRequest) -> HttpResponse:
     context = {
         "ads": Ads.objects.all()
@@ -20,7 +20,7 @@ def advertisements_list(request: HttpRequest) -> HttpResponse:
 
 
 @login_required(login_url='staff:login')
-@permission_required('crm.add_advertisements', raise_exception=True)
+@permission_required('ads.add_ads', raise_exception=True)
 def new_advertisement(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = NewAdvertisementForm(request.POST)
@@ -40,7 +40,7 @@ class AdvertisementDetail(LoginRequiredMixin, PermissionRequiredMixin, DetailVie
     template_name = 'ads/ads-detail.html'
     queryset = Ads.objects.prefetch_related('service')
     context_object_name = 'object'
-    permission_required = 'crm.view_advertisements'
+    permission_required = 'ads.view_ads'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -54,7 +54,7 @@ class AdvertisementDelete(LoginRequiredMixin, PermissionRequiredMixin, DeleteVie
     queryset = Ads.objects.prefetch_related('service')
     context_object_name = 'object'
     success_url = reverse_lazy("ads:advertisements")
-    permission_required = 'crm.delete_advertisements'
+    permission_required = 'ads.delete_ads'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -68,7 +68,7 @@ class AdvertisementEdit(LoginRequiredMixin, PermissionRequiredMixin, UpdateView)
     template_name = 'ads/ads-edit.html'
     fields = ['name', 'channel', 'budget', 'service']
     success_url = reverse_lazy("ads:advertisements")
-    permission_required = 'crm.change_advertisements'
+    permission_required = 'ads.change_ads'
 
     def get(self, request, *args, **kwargs):
         try:

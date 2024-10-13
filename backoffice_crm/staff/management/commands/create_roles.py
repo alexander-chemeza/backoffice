@@ -18,75 +18,76 @@ class Command(BaseCommand):
         # Assign permissions (example)
         admin_group = Group.objects.get(name='administrator')
         admin_permissions = Permission.objects.filter(codename__in=[
-            'add_advertisements',
+            'add_ads',
             'add_contracts',
-            'add_customer',
-            'add_profile',
-            'add_services',
+            'add_leads',
+            'add_customers',
+            'add_staff',
+            'add_products',
             'add_user',
-            'change_advertisements',
+            'change_ads',
             'change_contracts',
-            'change_customer',
-            'change_profile',
-            'change_services',
+            'change_leads',
+            'change_customers',
+            'change_staff',
+            'change_products',
             'change_user',
-            'delete_advertisements',
+            'delete_ads',
             'delete_contracts',
-            'delete_customer',
-            'delete_profile',
-            'delete_services',
+            'delete_leads',
+            'delete_customers',
+            'delete_staff',
+            'delete_products',
             'delete_user',
-            'view_advertisements',
+            'view_ads',
             'view_contracts',
-            'view_customer',
+            'view_leads',
+            'view_customers',
             'view_group',
-            'view_profile',
-            'view_services',
+            'view_staff',
+            'view_products',
             'view_user',
         ])
         admin_group.permissions.set(admin_permissions)
-        # admin_group.permissions.set(Permission.objects.all())  # All permissions
 
-        # Restrict administrator group from creating other administrators
-        # create_admin_perm = Permission.objects.get(codename='add_user')
-        # admin_group.permissions.remove(create_admin_perm)
-
-        # Assign specific permissions to other groups
         manager_group = Group.objects.get(name='manager')
         operator_group = Group.objects.get(name='operator')
         marketer_group = Group.objects.get(name='marketer')
 
-        # Example: Allow managers to view and edit leads
         manager_permissions = Permission.objects.filter(codename__in=[
-            'view_customer',
+            'view_customers',
             'view_contracts',
-            'add_customer',
+            'add_customers',
             'add_contracts',
-            'change_customer',
+            'change_customers',
             'change_contracts',
-            'delete_customer',
+            'delete_customers',
             'delete_contracts'
         ])
         manager_group.permissions.set(manager_permissions)
 
         # Example: Allow operators to view contracts
         operator_permissions = Permission.objects.filter(codename__in=[
-            'view_customer',
-            'add_customer',
-            'change_customer',
-            'delete_customer'
+            'view_customers',
+            'add_customers',
+            'change_customers',
+            'delete_customers',
+            'view_leads',
+            'add_leads',
+            'change_leads',
+            'delete_leads',
         ])
         operator_group.permissions.set(operator_permissions)
 
         marketer_permissions = Permission.objects.filter(codename__in=[
-            'view_services',
-            'view_advertisements',
-            'add_services',
-            'add_advertisements',
-            'change_services',
-            'change_advertisements',
-            'delete_services',
-            'delete_advertisements'
+            'view_products',
+            'view_ads',
+            'add_products',
+            'add_ads',
+            'change_products',
+            'change_ads',
+            'delete_products',
+            'delete_ads'
         ])
 
         marketer_group.permissions.set(marketer_permissions)

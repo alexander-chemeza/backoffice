@@ -22,27 +22,27 @@
             </h1>
         </div>
         <ul class="list-unstyled px-2">
-            {% if perms.crm.view_services %}
+            {% if perms.products.view_products %}
             <li><a href="/products/" class="bar-item text-decoration-none px-3 py-3 d-block">
                 <span><i class="fas fa-microchip"></i></span><span class="ml-1"> Услуги</span>
             </a></li>
             {% endif %}
-            {% if perms.crm.view_advertisements %}
+            {% if perms.ads.view_ads %}
             <li><a href="/ads/" class="bar-item text-decoration-none px-3 py-3 d-block">
                 <span><i class="fas fa-ad"></i></span><span class="ml-1"> Рекламные компании</span>
             </a></li>
             {% endif %}
-            {% if perms.crm.view_customer %}
+            {% if perms.leads.view_leads %}
             <li><a href="/leads/" class="bar-item text-decoration-none px-3 py-3 d-block">
                 <span><i class="fas fa-user-clock"></i></span><span class="px-1"> Лиды</span>
             </a></li>
             {% endif %}
-            {% if perms.crm.view_contracts %}
+            {% if perms.contracts.view_contracts %}
             <li><a href="/contracts/" class="bar-item text-decoration-none px-3 py-3 d-block">
                 <span><i class="fas fa-file-alt"></i></span><span class="px-1"> Контракты</span>
             </a></li>
             {% endif %}
-            {% if perms.crm.view_customer %}
+            {% if perms.customers.view_customers %}
             <li><a href="/customers/" class="bar-item text-decoration-none px-3 py-3 d-block">
                 <span><i class="fas fa-user-check"></i></span><span class="px-1"> Активные клиенты</span>
             </a></li>
